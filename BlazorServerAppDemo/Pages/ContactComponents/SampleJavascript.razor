@@ -1,0 +1,43 @@
+﻿@page "/SampleJavascript"
+@inject IJSRuntime jsRuntime
+
+
+<h3>Sample Javascript</h3>
+
+<button @onclick="ShowAlert">Alert</button><br><br />
+<span>@confirmResult</span><br><br />
+<button @onclick="ShowConfirm">Display Confirm</button> <br ><br />
+<button onclick="CallMethod()">Call Method</button>
+<button @onclick="CallInvokeMethodJavascript">Call Instance Method</button>
+
+@code {
+    private string confirmResult;
+
+    private void ShowAlert()
+    {
+        jsRuntime.InvokeVoidAsync("alert","Hello World from C# method");
+    }
+    private async Task ShowConfirm()
+    {
+        var result= await jsRuntime.InvokeAsync <bool> ("confirm","Do you need to proceed?");
+        confirmResult = result.ToString();
+    }
+    private async Task CallInvokeMethodJavascript()
+    {
+        var sampleJSReference = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/sample.js");  // js file only downloaded when this func called, when adding in _layout it will download to browser initially
+      //  await jsRuntime.InvokeVoidAsync("CallInstanceMethod", DotNetObjectReference.Create(this)); //used wen added in _layout
+        await sampleJSReference.InvokeVoidAsync("CallInstanceMethod", DotNetObjectReference.Create(this));
+    }
+
+
+    [JSInvokable]
+    public static Task<string> GetValueFromMethod()
+    {
+        return Task.FromResult<string>("Hello world");
+    }
+    [JSInvokable]
+    public async Task<string> GetValueFromInstance()
+    {
+        return ("Hello world from instance ");
+    }
+}

@@ -1,0 +1,106 @@
+﻿@page "/" 
+@page "/index"
+@using BlazorServerAppDemo.Pages.ContactComponents;
+@* 
+<h3>Hello, @userName</h3>
+<h3>Hello, @GetUserName() .. Welcome to our <b>Application</b> </h3>
+
+<p> Sum = @(4+9)</p>  
+<button @onclick ="ChangeName">Change Name</button>
+<button @onclick="@(() => {userName = "Paul";})">Change Name1</button> *@
+
+@* @if (testNum ==1)
+{
+    <p> Num is 1</p>
+}
+else
+{
+    <p> Num is not 1</p>
+}
+
+
+@for (int i=0;i<5;i++)
+{
+    <p> Value of i : @i</p>
+}
+@foreach( var name in names)
+{
+     <p>@name</p> *@
+    @* <p>@((MarkupString)name)</p>
+}
+@code{
+    private string userName = "John";
+    private int testNum = 1;
+    private List<string> names;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        names = new List<string>
+        {
+            "<b>Value 01</b>",
+            "Value 02",
+            "<i>Value 03</i>",
+            "Value 04",
+            "Value 05"
+        };
+    }
+
+    private string GetUserName()
+    {
+        return userName + " Thomas";
+    }
+    private int GetSum()
+    {
+        return 2 + 3;
+    }
+
+    private void ChangeName()
+    {
+        userName = "Peter";
+    }
+
+}   -- commented basic stuff *@ 
+
+@* 
+<input type="checkbox" @onchange="(() => { DisplayEmail = !DisplayEmail; } )" /><label> Display Email</label>
+ *@
+
+<h1>Index page</h1>
+<ContactList @ref="contactList" Contacts="contacts">
+     <NullContacts> 
+    <br />
+    <span>Contacts are loading (from Index razor)</span>
+    <br />
+    </NullContacts>
+    <EmptyContacts>
+    <br />
+    <span>No Contacts to display (index razor)</span>
+    <br /> 
+    </EmptyContacts>
+ </ContactList>
+<br />
+
+<button @onclick="HideContacts"> Show/Hide Contacts</button>
+<br /><br />
+@* <MyTextbox ="Sample Placeholder"></MyTextbox> *@
+<MyTextbox PlaceHolder="Placeholder 01" type="text" disabled="disabled"></MyTextbox>
+
+<MyTextbox @attributes="@(new Dictionary<string,object>
+                    {
+                        {"disabled","disabled"},
+                        {"placeholder","Contact Name"},
+                        {"type","text"}
+                    })"></MyTextbox>
+<MyTextbox @attributes ="@MyTextboxAttributes" ></MyTextbox>
+<br /><br />
+<a href="./testpage" >Test Page Directive</a>
+<br />
+<br />
+<button @onclick="NavigateToTest">Navigate to Test page</button>
+
+
+
+
+
+

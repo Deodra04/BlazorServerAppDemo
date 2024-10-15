@@ -1,0 +1,59 @@
+﻿@inject IJSRuntime js
+@if (displayContacts)
+{
+    @if (Contacts is null)
+    {
+        @NullContacts;
+    }
+    else if (Contacts.Count == 0)
+    {
+        @EmptyContacts
+        ;
+    }
+    else
+    {
+        <input type="checkbox" @bind="DisplayEmail" />
+        <label> Display Email</label>
+        @foreach (var contact in Contacts)
+        {
+            <Contactomponent01 CurrentContact="contact" DisplayEmail="DisplayEmail" DeleteCurrentContact="RequestPermission"></Contactomponent01>
+        }
+    }
+}
+<DeleteConfirmation @ref="deleteConfirmation" OnConfirmed="OnDeleteConfirmed"></DeleteConfirmation>
+@code{
+    [Parameter]
+    public RenderFragment NullContacts { get; set; }
+
+    [Parameter]
+    public RenderFragment EmptyContacts { get; set; }
+
+    [Parameter]
+    public List<Contact> Contacts { get; set; }
+    public bool DisplayEmail = true;
+
+    private bool displayContacts = true;
+    private DeleteConfirmation deleteConfirmation;
+
+    private async Task OnDeleteConfirmed(Contact contact)
+    {
+        Contacts.Remove(contact);
+        deleteConfirmation.Hide();
+    }
+
+    public async Task RequestPermission(Contact contact)
+    {
+        // var confirm = await js.InvokeAsync<bool>("confirm", $"Do you need to delete {contact.FirstName} {contact.LastName} from contact list?");
+        // if(confirm)
+        //     Contacts.Remove(contact);
+        deleteConfirmation.BodyContent = $"Do you need to delete {contact.FirstName} {contact.LastName} from contact list?";
+        deleteConfirmation.ContactToDelete = contact;
+        deleteConfirmation.Show();
+
+    }
+
+    public void ShowContacts() => displayContacts = true;
+    public void HideContacts() => displayContacts = false;
+
+
+}

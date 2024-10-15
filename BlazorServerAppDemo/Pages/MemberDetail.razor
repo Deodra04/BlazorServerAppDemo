@@ -1,0 +1,18 @@
+﻿@using BlazorServerAppDemo.Data
+<td>
+    @Member.MemberName
+</td>
+<td>
+    @Member.Email
+</td>
+<td>
+    @Member.Age
+</td>
+<td>
+    @Member.JoiningDate.ToString("dd-mm-yyyy")
+</td>
+
+@code {
+    [Parameter]
+    public Member Member { get; set; }
+}

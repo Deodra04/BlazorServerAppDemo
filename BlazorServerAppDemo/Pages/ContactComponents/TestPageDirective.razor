@@ -1,0 +1,26 @@
+﻿@page "/testpage/{contactName}/{Age:int}"
+@* @page "/testpage2"
+@page "/testpage/demo" *@
+
+@inject NavigationManager navManager
+
+<h3>Test - PageDirective</h3>
+<br /><br />
+<a href="./">Index</a>
+<br /><br />
+<button @onclick="NavigateToIndex">Navigate to Index</button>
+<br /><br />
+<span>@contactName (@Age)</span>
+
+@code {
+
+    [Parameter]
+    public string contactName { get; set; }
+    [Parameter]
+    public int Age { get; set; }
+
+    private void NavigateToIndex()
+    {
+        navManager.NavigateTo("./");
+    }
+}
